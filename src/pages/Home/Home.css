@@ -1,29 +1,35 @@
 .content {
     display: flex;
     justify-content: space-around;
+    flex-direction: column;
   }
   
   .settings {
-    width: 45%;
     padding: 10px;
     text-align: center;
     font-family: "Poppins", sans-serif;
     font-weight: 300;
+    width: 70%;
+    margin: auto;
   }
   
   .banner {
-    width: 55%;
+    width: 45%;
     align-self: center;
     padding: 8px;
   }
+
+  .settings_select {
+    display: flex;
+    flex-direction: column;
+    
+    padding: 20px;
+  }
   
   @media (max-width: 800px) {
-    .content {
-      flex-direction: column;
-      align-items: center;
-    }
+
     .banner {
-      width: 80%;
+      width: 65%;
       padding: 0;
       padding-top: 20px;
       margin-bottom: 20px;
