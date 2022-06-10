@@ -22,8 +22,13 @@
   .settings_select {
     display: flex;
     flex-direction: column;
-    
     padding: 20px;
+  }
+
+  .errorMessage{
+    font-size: small;
+    color: red;
+    display: flex;
   }
   
   @media (max-width: 800px) {

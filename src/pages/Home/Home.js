@@ -1,29 +1,59 @@
-import { Button, Container, MenuItem, TextField, Typography } from "@material-ui/core";
-import React, { useEffect, useState } from "react";
+import {
+  Button,
+  Container,
+  MenuItem,
+  TextField,
+  Typography,
+} from "@material-ui/core";
+import React, { useEffect, useState, useRef } from "react";
 import "./Home.css";
 import { makeStyles } from "@material-ui/core";
 import { findByLabelText } from "@testing-library/react";
 import "./Home.css";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
   textField: {
     marginBottom: "25px",
   },
+  button: {
+    marginTop: "20px",
+  },
 });
 
-const Home = () => {
+const Home = ({getQuestions}) => {
   const classes = useStyles();
-  const [categories, setCategories] = useState([]);
+  const [categories, setCategories] = useState([]); //will be fetched from api.
+  const [categoryError, setCategoryError] = useState(false);
+  const [difficultyError, setDifficultyError] = useState(false);
+  const [questionNumError, setQuestionNumError] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [difficulty, setDifficulty] = useState("");
+  const [questionNum, setQuestionNum] = useState(10);
+  const navigate = useNavigate();
+
+  const maxQuestionNumber = 20;
+  const minQuestionNumber = 1;
 
   useEffect(() => {
     axios.get("https://opentdb.com/api_category.php").then((response) => {
-      setCategories(response.data.trivia_categories);
+      setCategories(response.data.trivia_categories); //error handling vs. ekle
     });
   }, []);
 
+  const handleSubmit = () => {
+    if (!selectedCategory) setCategoryError(true);
+
+    if (!difficulty) setDifficultyError(true);
+
+    if (!questionNum || questionNum > maxQuestionNumber || questionNum < minQuestionNumber)
+      setQuestionNumError(true);
+    else if (difficulty && selectedCategory) {
+      getQuestions(questionNum, selectedCategory, difficulty);
+      navigate("./quiz");
+    }
+  };
 
   return (
     <div className="content">
@@ -34,17 +64,15 @@ const Home = () => {
         <div className="settings_select">
           <TextField
             className={classes.textField}
-            label="Enter Your Name"
-            variant="outlined"
-          />
-
-          <TextField
-            className={classes.textField}
             select
             label="Select Category"
             variant="outlined"
             value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
+            error={categoryError}
+            onChange={(e) => {
+              setCategoryError(false);
+              setSelectedCategory(e.target.value);
+            }}
           >
             {categories.map((category) => (
               <MenuItem key={category.id} value={category.id}>
@@ -59,7 +87,11 @@ const Home = () => {
             label="Select Difficulty"
             variant="outlined"
             value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
+            error={difficultyError}
+            onChange={(e) => {
+              setDifficultyError(false);
+              setDifficulty(e.target.value);
+            }}
           >
             <MenuItem key={"Easy"} value="easy">
               Easy
@@ -72,7 +104,31 @@ const Home = () => {
             </MenuItem>
           </TextField>
 
-          <Button variant="contained" color="primary" size="large">
+          <TextField
+            label="Enter Number Of Questions"
+            placeholder="<30"
+            variant="outlined"
+            type="number"
+            value={questionNum}
+            error={questionNumError}
+            onChange={(e) => {
+              setQuestionNum(e.target.value);
+              setQuestionNumError(false);
+            }}
+          />
+          {questionNumError && (
+            <p className="errorMessage">
+              Please enter a number between {minQuestionNumber} and {maxQuestionNumber}
+            </p>
+          )}
+
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="primary"
+            size="large"
+            onClick={handleSubmit}
+          >
             Start Quiz
           </Button>
         </div>
