@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Home = ({getQuestions}) => {
+const Home = ({getQuestions, setScore, setQuestions}) => {
   const classes = useStyles();
   const [categories, setCategories] = useState([]); //will be fetched from api.
   const [categoryError, setCategoryError] = useState(false);
@@ -37,6 +37,9 @@ const Home = ({getQuestions}) => {
   const minQuestionNumber = 1;
 
   useEffect(() => {
+    setScore(0);
+    setQuestions(null);
+    console.log("adfsdfsd")
     axios.get("https://opentdb.com/api_category.php").then((response) => {
       setCategories(response.data.trivia_categories); //error handling vs. ekle
     });
@@ -51,7 +54,7 @@ const Home = ({getQuestions}) => {
       setQuestionNumError(true);
     else if (difficulty && selectedCategory) {
       getQuestions(questionNum, selectedCategory, difficulty);
-      navigate("./quiz");
+      navigate("/quiz");
     }
   };
 
@@ -59,7 +62,7 @@ const Home = ({getQuestions}) => {
     <div className="content">
       <img className="banner" src="./question.svg" alt="quiz"></img>
       <div className="settings">
-        <span style={{ fontSize: 30 }}>Quiz Settings</span>
+        <span style={{ fontSize: 30 }}>Create a New Quiz</span>
 
         <div className="settings_select">
           <TextField

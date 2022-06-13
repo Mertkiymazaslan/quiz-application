@@ -30,6 +30,7 @@ function App() {
 
   const getQuestions = async (amount, category, difficulty) => { 
     const { data } = await axios.get(`https://opentdb.com/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=multiple&token=${token}`);
+    //databasede secili özelliklerde yeterli soru olmayabilir. Bunu da handle et bir şekilde.
     setQuestions(
       data.results.map((item, index) => {
         const answer = decodeString(item.correct_answer);
@@ -42,7 +43,8 @@ function App() {
           id: `${index}-${Date.now()}`,
           question: decodeString(item.question),
           answer: answer,
-          options: options.sort(() => Math.random() - 0.5)
+          options: options.sort(() => Math.random() - 0.5),
+          category: item.category
         };
       })
     );
@@ -58,9 +60,9 @@ function App() {
         <Header />
 
         <Routes>
-          <Route path='/' exact element={<Home getQuestions={getQuestions}/>} />
+          <Route path='/' exact element={<Home getQuestions={getQuestions} setScore={setScore} setQuestions={setQuestions}/>} />
           <Route path='/quiz' exact element={<Quiz questions={questions} score={score} setScore={setScore}/>} />
-          <Route path='/result' exact element={<Result />} />
+          <Route path='/result' exact element={<Result score={score}/>} />
         </Routes>
 
       </div>
