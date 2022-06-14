@@ -43,3 +43,9 @@
       width: 100%;
     }
   }
+
+  @media (min-width: 1200px) {
+    .banner {
+      width: 35%;
+    }
+  }

@@ -2,6 +2,7 @@ import { Button } from "@material-ui/core";
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
 import "./Result.css";
+import HomeIcon from "@material-ui/icons/Home";
 
 const Result = ({ score }) => {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ const Result = ({ score }) => {
         color="secondary"
         size="large"
         style={{ alignSelf: "center", marginTop: 20 }}
+        startIcon={<HomeIcon />}
         onClick={() => navigate("/")}
       >
         Go to homepage

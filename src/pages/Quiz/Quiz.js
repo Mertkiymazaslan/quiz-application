@@ -1,28 +1,28 @@
 import { CircularProgress } from "@material-ui/core";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Question from "../../components/Question/Question";
 import "./Quiz.css"
 
 const Quiz = ({ questions, score, setScore }) => {
-  //Kullanıcının seçtiği alanda yeterli sayıda soru olmayabilir!! O zaman bunu bildir. mesaj ile
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if(!questions)
+      navigate("/")
+  },[])
 
   return (
     <div className="quiz">
-      {/* {questions.map((item) => <div key={item.id}> 
-        <p>{item.question}</p>
-        <p>{item.options}</p>
-        <p>{item.answer}</p>
-        <br></br>
-      </div>)} */}
 
       {questions ? (
         <>
           <div className="quizInfo">
-              <span>{questions[0].category}</span>
+              <span>Category: {questions[0].category}</span>
               <span>Score: {score}</span>
           </div>
-          <p>Question: {currentQuestion+1}</p>
+          <p style={{"fontSize": "larger"}}>Question: {currentQuestion+1}</p>
 
           <Question 
             currQuestion={questions[currentQuestion]}

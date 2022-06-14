@@ -1,8 +1,9 @@
 import React from 'react'
+import "./Footer.css"
 
 const Footer = () => {
   return (
-    <div style={{textAlign: "center"}}>
+    <div className='footer'>
         By Veysel Mert Kıymazaslan
     </div>
   )

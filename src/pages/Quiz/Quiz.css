@@ -11,5 +11,7 @@
     display: flex;
     justify-content: space-around;
     text-transform: uppercase;
+    font-weight: 550;
+    font-size: large;
     margin: 10px;
   }

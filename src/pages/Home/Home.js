@@ -22,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Home = ({getQuestions, setScore, setQuestions}) => {
+const Home = ({ getQuestions, setScore, setQuestions }) => {
   const classes = useStyles();
   const [categories, setCategories] = useState([]); //will be fetched from api.
   const [categoryError, setCategoryError] = useState(false);
@@ -30,31 +30,48 @@ const Home = ({getQuestions, setScore, setQuestions}) => {
   const [questionNumError, setQuestionNumError] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [difficulty, setDifficulty] = useState("");
-  const [questionNum, setQuestionNum] = useState(10);
+  const [questionNum, setQuestionNum] = useState(8);
+  const [apiQuestionError, setApiQuestionError] = useState(false);
   const navigate = useNavigate();
 
-  const maxQuestionNumber = 20;
+  const maxQuestionNumber = 15;
   const minQuestionNumber = 1;
+  const apiQuestionErrorMessage =
+    "There are not enough questions in the category and difficulty you selected. Please lower the amount or create a different quiz.";
+  const enteredNumberErrorMessage = `Please enter a number between ${minQuestionNumber} and ${maxQuestionNumber}`;
 
   useEffect(() => {
     setScore(0);
     setQuestions(null);
-    console.log("adfsdfsd")
     axios.get("https://opentdb.com/api_category.php").then((response) => {
       setCategories(response.data.trivia_categories); //error handling vs. ekle
     });
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!selectedCategory) setCategoryError(true);
 
     if (!difficulty) setDifficultyError(true);
 
-    if (!questionNum || questionNum > maxQuestionNumber || questionNum < minQuestionNumber)
+    if (
+      !questionNum ||
+      questionNum > maxQuestionNumber ||
+      questionNum < minQuestionNumber
+    )
       setQuestionNumError(true);
     else if (difficulty && selectedCategory) {
-      getQuestions(questionNum, selectedCategory, difficulty);
-      navigate("/quiz");
+      const questionsFetched = await getQuestions(
+        questionNum,
+        selectedCategory,
+        difficulty
+      ); //sonucu burada bekliyorum cünkü hatalı olursa (sorular gelmezse) diğer sayfaya gitmek istemiyorum.
+      if (questionsFetched) {
+        //sorular sorunsuz şekilde apiden alındıysa
+        navigate("/quiz");
+      } else {
+        //hata oluştuysa (apide seçilen kategoride yeterli sayıda soru bulunmayabilir.)
+        setApiQuestionError(true);
+      }
     }
   };
 
@@ -74,6 +91,7 @@ const Home = ({getQuestions, setScore, setQuestions}) => {
             error={categoryError}
             onChange={(e) => {
               setCategoryError(false);
+              setApiQuestionError(false);
               setSelectedCategory(e.target.value);
             }}
           >
@@ -93,6 +111,7 @@ const Home = ({getQuestions, setScore, setQuestions}) => {
             error={difficultyError}
             onChange={(e) => {
               setDifficultyError(false);
+              setApiQuestionError(false);
               setDifficulty(e.target.value);
             }}
           >
@@ -109,7 +128,6 @@ const Home = ({getQuestions, setScore, setQuestions}) => {
 
           <TextField
             label="Enter Number Of Questions"
-            placeholder="<30"
             variant="outlined"
             type="number"
             value={questionNum}
@@ -120,9 +138,10 @@ const Home = ({getQuestions, setScore, setQuestions}) => {
             }}
           />
           {questionNumError && (
-            <p className="errorMessage">
-              Please enter a number between {minQuestionNumber} and {maxQuestionNumber}
-            </p>
+            <p className="errorMessage">{enteredNumberErrorMessage}</p>
+          )}
+          {apiQuestionError && (
+            <p className="errorMessage">{apiQuestionErrorMessage}</p>
           )}
 
           <Button

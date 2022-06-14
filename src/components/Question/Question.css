@@ -7,7 +7,7 @@
   }
 
   .singleQuestion {
-    width: 95%;
+    width: 80%;
     min-height: 350px;
     display: flex;
     flex-direction: column;
@@ -16,10 +16,15 @@
     border: 3px solid grey;
     padding: 20px;
     margin-top: 10px;
+    background-color: rgba(133, 148, 120, 0.151);
+  }
+
+  .progressBar{
+    width: 80%;
   }
 
   .options {
-    width: 100%;
+    width: 80%;
     display: flex;
     flex-wrap: wrap;
     flex: 1;
@@ -29,16 +34,21 @@
   }
 
   .singleOption {
-    width: 46%;
+    width: 40%;
     height: 50px;
     padding: 15px 20px;
     margin: 10px;
+    transition: all 0.7s ease;
+  }
+
+  .singleOption:hover{
+    cursor: pointer;
   }
 
   .controls {
     display: flex;
     width: 100%;
-    justify-content: space-around;
+    justify-content: space-between;
   }
 
   .correct {
