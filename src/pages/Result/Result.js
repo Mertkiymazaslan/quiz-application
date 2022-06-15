@@ -9,7 +9,7 @@ const Result = ({ score }) => {
 
   return (
     <div className="result">
-      <span className="title">Final Score : {score}</span>
+      <span className="title">Final Score : {score} </span>
       <Button
         variant="contained"
         color="secondary"

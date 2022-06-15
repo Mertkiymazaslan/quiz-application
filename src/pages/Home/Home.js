@@ -12,6 +12,7 @@ import { findByLabelText } from "@testing-library/react";
 import "./Home.css";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles({
   textField: {
@@ -32,6 +33,7 @@ const Home = ({ getQuestions, setScore, setQuestions }) => {
   const [difficulty, setDifficulty] = useState("");
   const [questionNum, setQuestionNum] = useState(8);
   const [apiQuestionError, setApiQuestionError] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const maxQuestionNumber = 15;
@@ -60,11 +62,13 @@ const Home = ({ getQuestions, setScore, setQuestions }) => {
     )
       setQuestionNumError(true);
     else if (difficulty && selectedCategory) {
+      setLoading(true);
       const questionsFetched = await getQuestions(
         questionNum,
         selectedCategory,
         difficulty
       ); //sonucu burada bekliyorum cünkü hatalı olursa (sorular gelmezse) diğer sayfaya gitmek istemiyorum.
+      setLoading(false);
       if (questionsFetched) {
         //sorular sorunsuz şekilde apiden alındıysa
         navigate("/quiz");
@@ -143,16 +147,18 @@ const Home = ({ getQuestions, setScore, setQuestions }) => {
           {apiQuestionError && (
             <p className="errorMessage">{apiQuestionErrorMessage}</p>
           )}
-
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="primary"
-            size="large"
-            onClick={handleSubmit}
-          >
-            Start Quiz
-          </Button>
+          {loading && <CircularProgress className="progress" />}
+          {!loading && (
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="primary"
+              size="large"
+              onClick={handleSubmit}
+            >
+              Start Quiz
+            </Button>
+          )}
         </div>
       </div>
     </div>

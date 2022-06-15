@@ -10,7 +10,7 @@ import axios from "axios";
 
 function App() {
   // const [token, setToken] = useState("");
-  const [questions, setQuestions] = useState(null);
+  const [questions, setQuestions] = useState([]);
   const [score, setScore] = useState(0);
   //app.jsde fetchleri yapmak, stateleri tutmak dogru mu? Bos mu olmalı tamamen?
   //context kullanmalı mıyjm ?
