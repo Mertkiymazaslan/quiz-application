@@ -5,3 +5,11 @@
     height: 60vh;
     text-align: center;
   }
+  .finalScore{
+    text-transform: uppercase;
+    font-size: 5vw;
+    font-family: "Montserrat", sans-serif;
+  }
+  .statistics{
+    font-size: 17px;
+  }

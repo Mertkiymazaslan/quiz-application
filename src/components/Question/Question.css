@@ -16,11 +16,12 @@
     border: 3px solid grey;
     padding: 20px;
     margin-top: 10px;
-    background-color: rgba(133, 148, 120, 0.151);
+    background-color: #F9F7F7;
   }
 
   .progressBar{
     width: 80%;
+    margin-bottom: 20px;
   }
 
   .options {
@@ -30,15 +31,16 @@
     flex: 1;
     align-items: center;
     justify-content: space-around;
-    margin: 10px;
+    gap: 10px;
   }
 
   .singleOption {
-    width: 40%;
-    height: 50px;
-    padding: 15px 20px;
+    width: 45%;
+    min-height: 50px;
+    padding: 10px 10px;
     margin: 10px;
     transition: all 0.7s ease;
+    
   }
 
   .singleOption:hover{
@@ -49,8 +51,19 @@
     display: flex;
     width: 100%;
     justify-content: space-between;
+    flex-wrap: wrap;
   }
 
+  .controls button{
+    height: 35px;
+    text-transform: unset;
+  }
+
+  .showAnswerButton{
+    padding: 8px 22px;
+    font-size: 0.9375rem;
+    
+  }
   .correct {
     background-color: rgb(7, 207, 0);
     color: white;
@@ -61,4 +74,17 @@
     background-color: rgb(233, 0, 0);
     color: white;
     box-shadow: 0 0 1px black;
+  }
+
+  @media screen and (max-width: 600px) {
+    .showAnswerButton{
+      order: 3;
+      flex: 1;
+    }
+    .controls button{
+      width: 50%;
+    }
+    .singleOption{
+      width: 70%;
+    }
   }

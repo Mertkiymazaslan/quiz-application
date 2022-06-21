@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Home = ({ getQuestions, setScore, setQuestions }) => {
+const Home = ({ getQuestions, setQuestions }) => {
   const classes = useStyles();
   const [categories, setCategories] = useState([]); //will be fetched from api.
   const [categoryError, setCategoryError] = useState(false);
@@ -43,8 +43,8 @@ const Home = ({ getQuestions, setScore, setQuestions }) => {
   const enteredNumberErrorMessage = `Please enter a number between ${minQuestionNumber} and ${maxQuestionNumber}`;
 
   useEffect(() => {
-    setScore(0);
     setQuestions(null);
+    console.log("afdf")
     axios.get("https://opentdb.com/api_category.php").then((response) => {
       setCategories(response.data.trivia_categories); //error handling vs. ekle
     });

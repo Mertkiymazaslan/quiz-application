@@ -10,8 +10,7 @@ import axios from "axios";
 
 function App() {
   // const [token, setToken] = useState("");
-  const [questions, setQuestions] = useState([]);
-  const [score, setScore] = useState(0);
+  const [questions, setQuestions] = useState(null);
   //app.jsde fetchleri yapmak, stateleri tutmak dogru mu? Bos mu olmalı tamamen?
   //context kullanmalı mıyjm ?
 
@@ -27,6 +26,7 @@ function App() {
   };
 
   const getQuestions = async (amount, category, difficulty) => {
+    //WHY NO SESSION TOKEN ?
     //Normalde session token kullanarak yapmıştım ancak buglı çalıştığı  için kaldırdım. Artık quizde aynı sorular denk gelebilir.(session token bunu engelliyordu)
     //bug sebebi: normalde api, secilen alanda yeterli soru yoksa response_code:1 dönüyor. başarılı ise 0 ve tokendeki tüm farklı sorular tükendiyse(tekrar aynı soruları sorması gerekiyorsa) 4 dönüyor
     //ancak token kullandığım zaman, mesela 15 soru sectik ve apide o kategoride o kadar soru yok ise normalde 1 dönmesi lazımken 4 dönüyor sanki o kadar soru var ama token tükenmiş gibi.
@@ -36,7 +36,6 @@ function App() {
     // const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=multiple&token=${token}`;
     const url = `https://opentdb.com/api.php?amount=${amount}&category=${category}&difficulty=${difficulty}&type=multiple`;
     const { data } = await axios.get(url);
-    //databasede secili özelliklerde yeterli soru olmayabilir. Bunu da handle et bir şekilde.
     if (data.response_code === 1) {
       //apide yeterli soru yok.
       return false;
@@ -54,7 +53,7 @@ function App() {
             id: `${index}-${Date.now()}`,
             question: decodeString(item.question),
             answer: answer,
-            options: options.sort(() => Math.random() - 0.5),
+            options: options.sort(() => Math.random() - 0.5), //randomly shuffle the options
             category: item.category,
           };
         })
@@ -63,7 +62,7 @@ function App() {
     }
   };
 
-  // useEffect(() => {
+  // useEffect(() => { token kullanımı kaldırıldı sebebi yukarıda yazıyor.
   //   getToken();
   // },[])
 
@@ -79,7 +78,6 @@ function App() {
             element={
               <Home
                 getQuestions={getQuestions}
-                setScore={setScore}
                 setQuestions={setQuestions}
               />
             }
@@ -88,10 +86,10 @@ function App() {
             path="/quiz"
             exact
             element={
-              <Quiz questions={questions} score={score} setScore={setScore} />
+              <Quiz questions={questions} />
             }
           />
-          <Route path="/result" exact element={<Result score={score} />} />
+          <Route path="/result" element={<Result />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </div>

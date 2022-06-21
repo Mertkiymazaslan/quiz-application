@@ -2,37 +2,37 @@ import { CircularProgress } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Question from "../../components/Question/Question";
-import "./Quiz.css"
+import "./Quiz.css";
 
-const Quiz = ({ questions, score, setScore }) => {
+const Quiz = ({ questions}) => {
   const [currentQuestion, setCurrentQuestion] = useState(0);
+  const [score, setScore] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if(!questions)
-      navigate("/")
-  },[])
+    if (!questions)
+      navigate("/");
+  }, []);
 
   return (
     <div className="quiz">
-
       {questions ? (
         <>
           <div className="quizInfo">
-              <span>Category: {questions[0].category}</span>
-              <span>Score: {score}</span>
+            <span>Category: {questions[0].category}</span>
+            <span>Score: {score}</span>
           </div>
-          <p style={{"fontSize": "larger"}}>Question: {currentQuestion+1}</p>
+          <p style={{ fontSize: "larger" }}>Question: {currentQuestion + 1}</p>
 
-          <Question 
+          <Question
             currQuestion={questions[currentQuestion]}
             setCurrentQuestion={setCurrentQuestion}
             setScore={setScore}
+            score={score}
             totalQuestionNumber={questions.length}
-            questionIndex={currentQuestion+1}
+            questionIndex={currentQuestion + 1}
           />
         </>
-        
       ) : (
         <CircularProgress
           style={{ display: "flex", margin: "auto" }}
