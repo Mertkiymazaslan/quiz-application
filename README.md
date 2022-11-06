@@ -1,3 +1,5 @@
+Please try to run "npm install --force" if "npm install" throws an error. It is because of the version of Material UI.
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
